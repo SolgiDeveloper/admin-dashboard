@@ -1,8 +1,14 @@
 import logo from "@assets/images/logo.svg";
 import { useForm } from "react-hook-form";
-import { Link, useSubmit } from "react-router-dom";
+import { Link, useActionData, useNavigate, useNavigation, useRouteError, useSubmit } from "react-router-dom";
 import { httpService } from "../../../core/http-service";
+import { useEffect } from "react";
 const Register = () => {
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state !== 'idle'
+  const isSuccessOperation = useActionData()
+  const navigate = useNavigate()
+  const routeError = useRouteError()
   const {
     register,
     handleSubmit,
@@ -15,6 +21,13 @@ const Register = () => {
     const {confirmPassword, ...userData} = data;
     submitForm(userData, {method: 'post'})
   }
+  useEffect(()=> {
+    if(isSuccessOperation){
+      setTimeout(()=>{
+        navigate("/login")
+      }, 2000)
+    }
+  }, [isSuccessOperation])
   return (
     <>
       <div className="text-center mt-4">
@@ -105,10 +118,22 @@ const Register = () => {
                 }
               </div>
               <div className="text-center mt-3">
-                <button className="btn btn-lg btn-primary" type="submit">
-                  ثبت نام
+                <button disabled={isSubmitting} className="btn btn-lg btn-primary" type="submit">
+                  {isSubmitting ? 'در حال انجام عملیات' : 'ثبت نام'}
                 </button>
               </div>
+              {isSuccessOperation && <div className="alert alert-success text-success p-2 mt-3">
+                عملیات موفیت آمیز بود.
+              </div>}
+              {
+                routeError && <div className="alert alert-danger text-danger p-2 mt-3" >
+                  {
+                    routeError.response?.data.map((error, index) => 
+                    <p key={index} className="mb-0">{error.description}</p>)
+                  }
+                
+                </div>
+              }
             </form>
           </div>
         </div>
