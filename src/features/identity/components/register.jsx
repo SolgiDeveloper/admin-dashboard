@@ -3,12 +3,14 @@ import { useForm } from "react-hook-form";
 import { Link, useActionData, useNavigate, useNavigation, useRouteError, useSubmit } from "react-router-dom";
 import { httpService } from "../../../core/http-service";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 const Register = () => {
   const navigation = useNavigation()
   const isSubmitting = navigation.state !== 'idle'
   const isSuccessOperation = useActionData()
   const navigate = useNavigate()
   const routeError = useRouteError()
+  const {t} = useTranslation()
   const {
     register,
     handleSubmit,
@@ -119,7 +121,8 @@ const Register = () => {
               </div>
               <div className="text-center mt-3">
                 <button disabled={isSubmitting} className="btn btn-lg btn-primary" type="submit">
-                  {isSubmitting ? 'در حال انجام عملیات' : 'ثبت نام'}
+                  {/* {isSubmitting ? 'در حال انجام عملیات' : 'ثبت نام'} */}
+                    {t('register.register')}
                 </button>
               </div>
               {isSuccessOperation && <div className="alert alert-success text-success p-2 mt-3">
