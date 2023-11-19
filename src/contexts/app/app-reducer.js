@@ -3,7 +3,7 @@ const appReducer = (state, action) => {
         case 'CHANGE_LANGUAGE' : {
             return {
                 ...state,
-                language: action.language
+                language: action.payload
             }
         }
     }
